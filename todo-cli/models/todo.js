@@ -41,10 +41,7 @@ module.exports = (sequelize, DataTypes) => {
           dueDate: {
             [DataTypes.Op.lt]: today
           }
-        },
-        order: [
-          ['dueDate', 'ASC']
-        ]
+        }
       });
     }
 
@@ -58,10 +55,7 @@ module.exports = (sequelize, DataTypes) => {
             [DataTypes.Op.gte]: startOfDay,
             [DataTypes.Op.lt]: endOfDay
           }
-        },
-        order: [
-          ['dueDate', 'ASC']
-        ]
+        }
       });
     }
 
@@ -72,10 +66,7 @@ module.exports = (sequelize, DataTypes) => {
           dueDate: {
             [DataTypes.Op.gt]: today
           }
-        },
-        order: [
-          ['dueDate', 'ASC']
-        ]
+        }
       });
     }
 
@@ -110,6 +101,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Todo',
+    paranoid: false
   });
   return Todo;
 };
