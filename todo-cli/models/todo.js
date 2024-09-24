@@ -41,7 +41,10 @@ module.exports = (sequelize, DataTypes) => {
           dueDate: {
             [DataTypes.Op.lt]: today
           }
-        }
+        },
+        order: [
+          ['dueDate', 'ASC']
+        ]
       });
     }
 
@@ -55,7 +58,10 @@ module.exports = (sequelize, DataTypes) => {
             [DataTypes.Op.gte]: startOfDay,
             [DataTypes.Op.lt]: endOfDay
           }
-        }
+        },
+        order: [
+          ['dueDate', 'ASC']
+        ]
       });
     }
 
@@ -66,7 +72,10 @@ module.exports = (sequelize, DataTypes) => {
           dueDate: {
             [DataTypes.Op.gt]: today
           }
-        }
+        },
+        order: [
+          ['dueDate', 'ASC']
+        ]
       });
     }
 
@@ -80,12 +89,16 @@ module.exports = (sequelize, DataTypes) => {
 
     displayableString() {
       let checkbox = this.completed ? "[x]" : "[ ]";
-      let dueDate = this.dueDate;
+      let dueDate = "";
       const today = new Date();
       const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
       const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
-      if (dueDate >= startOfDay && dueDate < endOfDay) {
+      if (this.dueDate < startOfDay) {
+        dueDate = this.dueDate.toLocaleDateString();
+      } else if (this.dueDate >= startOfDay && this.dueDate < endOfDay) {
         dueDate = "";
+      } else {
+        dueDate = this.dueDate.toLocaleDateString();
       }
       return `${this.id}. ${checkbox} ${this.title} ${dueDate}`;
     }
