@@ -18,7 +18,7 @@ app.get("/todos", async function (request, response) {
 app.post("/todos", async function (request, response) {
   console.log("Creating a todo", request.body);
   try {
-    const todo = await Todo.create(request.body);
+    const todo = await Todo.addTask(request.body);
     return response.json(todo);
   } catch (error) {
     console.log(error);
@@ -28,10 +28,10 @@ app.post("/todos", async function (request, response) {
 
 app.put("/todos/:id/markAsCompleted", async function (request, response) {
   console.log("We have to update a todo with ID:", request.params.id);
-  const todo = await Todo.findByPk(request.params.id);
   try {
-    const updatedTodo = await todo.markAsCompleted();
-    return response.json(updatedTodo);
+    const updatedTodo = await Todo.markAsComplete(request.params.id);
+    const todo = await Todo.findByPk(request.params.id);
+    return response.json(todo);
   } catch (error) {
     console.log(error);
     return response.status(422).json(error);
