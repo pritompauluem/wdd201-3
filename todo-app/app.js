@@ -5,18 +5,20 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 
 app.get("/todos", async function (request, response) {
+  console.log("Processing list of all Todos ...");
   try {
     const todos = await Todo.findAll();
     return response.json(todos);
   } catch (error) {
     console.log(error);
-    return response.status(500).json({ error: "Internal Server Error" });
+    return response.status(500).json(error);
   }
 });
 
 app.post("/todos", async function (request, response) {
+  console.log("Creating a todo", request.body);
   try {
-    const todo = await Todo.addTodo(request.body);
+    const todo = await Todo.create(request.body);
     return response.json(todo);
   } catch (error) {
     console.log(error);
@@ -25,6 +27,7 @@ app.post("/todos", async function (request, response) {
 });
 
 app.put("/todos/:id/markAsCompleted", async function (request, response) {
+  console.log("We have to update a todo with ID:", request.params.id);
   const todo = await Todo.findByPk(request.params.id);
   try {
     const updatedTodo = await todo.markAsCompleted();
@@ -36,16 +39,17 @@ app.put("/todos/:id/markAsCompleted", async function (request, response) {
 });
 
 app.delete("/todos/:id", async function (request, response) {
+  console.log("Delete a todo by ID: ", request.params.id);
   try {
-    const deleted = await Todo.destroy({
+    const deletedRowCount = await Todo.destroy({
       where: {
         id: request.params.id,
       },
     });
-    return response.json(deleted ? true : false);
+    return response.send(deletedRowCount === 1);
   } catch (error) {
     console.log(error);
-    return response.status(500).json({ error: "Internal Server Error" });
+    return response.status(422).json(error);
   }
 });
 
