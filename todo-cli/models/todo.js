@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       laterTasks.forEach((task) => console.log(task.displayableString()));
     }
 
-    // Fix overdue to include completed tasks
+    // Fix: Include completed tasks as well
     static async overdue() {
       return await Todo.findAll({
         where: {
@@ -37,7 +37,6 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
-    // Return tasks due today
     static async dueToday() {
       const today = new Date().toISOString().split("T")[0];
       return await Todo.findAll({
@@ -48,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
-    // Fix dueLater to include completed tasks
+    // Fix: Include completed tasks as well
     static async dueLater() {
       return await Todo.findAll({
         where: {
@@ -60,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
-    // Fix markAsComplete method to update the task properly
+    // Fix: Ensure the task is marked as complete
     static async markAsComplete(id) {
       const task = await Todo.findByPk(id);
       if (task) {
@@ -69,17 +68,17 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
 
-    // Updated displayableString method
+    // Fix displayableString method
     displayableString() {
       const checkbox = this.completed ? "[x]" : "[ ]";
-      const today = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD' format
+      const today = new Date().toISOString().split("T")[0];
 
-      // If the task is due today, don't show the date
+      // If task is due today, don't show the date
       if (this.dueDate === today) {
         return `${this.id}. ${checkbox} ${this.title.trim()}`;
       }
 
-      // For past or future tasks, show the date
+      // Show the date for overdue or future tasks
       return `${this.id}. ${checkbox} ${this.title.trim()} ${this.dueDate}`;
     }
   }
