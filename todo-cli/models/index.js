@@ -1,11 +1,10 @@
-"use strict";
-
+// models/index.js
 const fs = require("fs");
 const path = require("path");
 const Sequelize = require("sequelize");
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "development";
-const config = require(__dirname + "/../config/config.js")[env];
+const config = require(__dirname + "/../config/config.json")[env];
 const db = {};
 
 let sequelize;
@@ -20,7 +19,6 @@ if (config.use_env_variable) {
   );
 }
 
-// Load all models in the models directory
 fs.readdirSync(__dirname)
   .filter((file) => {
     return (
@@ -35,7 +33,6 @@ fs.readdirSync(__dirname)
     db[model.name] = model;
   });
 
-// Setup associations if any models define them
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
     db[modelName].associate(db);

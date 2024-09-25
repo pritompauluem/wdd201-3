@@ -18,7 +18,6 @@ const getJSDate = (days) => {
   const oneDay = 60 * 60 * 24 * 1000;
   return new Date(today.getTime() + days * oneDay);
 };
-
 (async () => {
   const { title, dueInDays } = argv;
   if (!title || dueInDays === undefined) {

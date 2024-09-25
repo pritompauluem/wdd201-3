@@ -15,9 +15,9 @@ const markAsComplete = async (id) => {
   if (!id) {
     throw new Error("Need to pass an id");
   }
-  if (!Number.isInteger(id)) {
+  if (!Number.isInteger(parseInt(id))) {
     throw new Error("The id needs to be an integer");
   }
-  await markAsComplete(id);
+  await markAsComplete(parseInt(id));
   await db.Todo.showList();
 })();
